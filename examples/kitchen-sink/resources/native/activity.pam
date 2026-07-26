@@ -1,0 +1,47 @@
+<AppScreen title="Activity" subtitle="Everything important, ordered by time.">
+    <VStack class="gap-3">
+        <Card class="p-4 rounded-2xl">
+            <HStack class="gap-3 items-start">
+                <Badge action="success"><CheckIcon /></Badge>
+                <VStack class="flex-1 gap-1">
+                    <Heading size="sm">Payment confirmed</Heading>
+                    <Text class="ui-text-muted">
+                        2 min ago - Order #1048 was paid by credit card.
+                    </Text>
+                </VStack>
+            </HStack>
+        </Card>
+        <Card class="p-4 rounded-2xl">
+            <HStack class="gap-3 items-start">
+                <Badge action="info"><ShareIcon /></Badge>
+                <VStack class="flex-1 gap-1">
+                    <Heading size="sm">Order shipped</Heading>
+                    <Text class="ui-text-muted">
+                        48 min ago - Order #1046 is on its way.
+                    </Text>
+                </VStack>
+            </HStack>
+        </Card>
+        <Card class="p-4 rounded-2xl">
+            <HStack class="gap-3 items-start">
+                <Badge action="warning"><ClockIcon /></Badge>
+                <VStack class="flex-1 gap-1">
+                    <Heading size="sm">Payment pending</Heading>
+                    <Text class="ui-text-muted">
+                        1 hour ago - Order #1047 awaits PIX confirmation.
+                    </Text>
+                </VStack>
+            </HStack>
+        </Card>
+    </VStack>
+
+    <Card class="p-5 rounded-2xl">
+        <VStack class="gap-3 items-center">
+            <MessageCircleIcon />
+            <Heading size="md">All caught up</Heading>
+            <Text class="ui-text-muted">
+                New events appear here automatically.
+            </Text>
+        </VStack>
+    </Card>
+</AppScreen>
