@@ -1,0 +1,262 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Pam\MobileUi\Enum\AttachmentType;
+use Pam\Native\Component;
+use Pam\Native\Renderable;
+use Pam\Native\View;
+
+final class Catalog extends Component
+{
+    private bool $checked = true;
+    private float $progress = 64.0;
+    private bool $modalOpen = false;
+    private bool $sheetOpen = false;
+    private bool $drawerOpen = false;
+    private bool $selectOpen = false;
+    private bool $galleryOpen = false;
+    private int $galleryIndex = 0;
+    private int $responseBranch = 0;
+    private string $framework = 'Laravel';
+    private string $email = '';
+    private string $plan = 'starter';
+    private string $selectedDate = '2026-07-23';
+    private string $notice = 'All interactions use semantic native events.';
+    /** @var list<string> */
+    private array $nativePackages = [
+        'pushinbr/pam-native',
+        'pushinbr/pam-mobile-ui',
+        'pushinbr/pam-plugin-api',
+        'pushinbr/pam-cli',
+    ];
+    /**
+     * @var list<array{
+     *     id: string,
+     *     filename: string,
+     *     mediaType: string,
+     *     type: int,
+     *     url: string
+     * }>
+     */
+    private array $promptFiles = [[
+        'id' => 'architecture',
+        'filename' => 'architecture.md',
+        'mediaType' => 'text/markdown',
+        'type' => AttachmentType::File->value,
+        'url' => 'file:///architecture.md',
+    ]];
+    /** @var list<array{url: string, alt: string}> */
+    private array $gallery = [
+        [
+            'url' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600',
+            'alt' => 'Mountains under a bright sky',
+        ],
+        [
+            'url' => 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1600',
+            'alt' => 'Sunrise over a green landscape',
+        ],
+        [
+            'url' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600',
+            'alt' => 'Sunlight crossing a forest',
+        ],
+    ];
+    /** @var list<string> */
+    private array $expandedFolders = ['/src'];
+    /** @var list<string> */
+    private array $expandedAccordions = ['performance', 'freedom'];
+
+    public function render(): Renderable
+    {
+        return View::make('catalog');
+    }
+
+    public function toggle(): void
+    {
+        $this->checked = !$this->checked;
+    }
+
+    public function submit(): void
+    {
+        $this->notice = 'Profile saved through one compact native event.';
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function updateProgress(string $payload): void
+    {
+        $this->progress = max(0.0, min(100.0, (float) $payload));
+    }
+
+    public function toggleModal(): void
+    {
+        $this->modalOpen = !$this->modalOpen;
+    }
+
+    public function closeModal(): void
+    {
+        $this->modalOpen = false;
+    }
+
+    public function toggleSheet(): void
+    {
+        $this->sheetOpen = !$this->sheetOpen;
+    }
+
+    public function closeSheet(): void
+    {
+        $this->sheetOpen = false;
+    }
+
+    public function toggleDrawer(): void
+    {
+        $this->drawerOpen = !$this->drawerOpen;
+    }
+
+    public function closeDrawer(): void
+    {
+        $this->drawerOpen = false;
+    }
+
+    public function chooseMenu(string $action): void
+    {
+        $this->notice = "Native menu action: {$action}.";
+    }
+
+    public function toggleSelect(): void
+    {
+        $this->selectOpen = !$this->selectOpen;
+    }
+
+    public function closeSelect(): void
+    {
+        $this->selectOpen = false;
+    }
+
+    public function setGalleryOpen(bool $open): void
+    {
+        $this->galleryOpen = $open;
+    }
+
+    public function selectGalleryImage(string $payload): void
+    {
+        $this->galleryIndex = max(
+            0,
+            min(count($this->gallery) - 1, (int) $payload),
+        );
+    }
+
+    public function selectResponseBranch(string $payload): void
+    {
+        $this->responseBranch = max(0, min(1, (int) $payload));
+    }
+
+    /**
+     * @return list<array{
+     *     id: string,
+     *     filename: string,
+     *     mediaType: string,
+     *     type: int,
+     *     url: string
+     * }>
+     */
+    public function promptFiles(): array
+    {
+        return $this->promptFiles;
+    }
+
+    /**
+     * @param array{
+     *     text: string,
+     *     files: list<array<string, string|int|float|bool|null>>
+     * } $submission
+     */
+    public function sendPrompt(array $submission): void
+    {
+        $text = $submission['text'];
+        $fileCount = count($submission['files']);
+        $this->promptFiles = [];
+        $this->notice = $text === ''
+            ? "Submitted {$fileCount} attachment(s)."
+            : "Submitted prompt: {$text} ({$fileCount} attachment(s))";
+    }
+
+    public function openMessageLink(string $uri): void
+    {
+        $this->notice = "Markdown link activated: {$uri}";
+    }
+
+    public function selectDate(string $payload): void
+    {
+        if ($payload !== '') {
+            $this->selectedDate = $payload;
+        }
+    }
+
+    /**
+     * @return array{
+     *     checked: bool,
+     *     progress: float,
+     *     modalOpen: bool,
+     *     sheetOpen: bool,
+     *     drawerOpen: bool,
+     *     selectOpen: bool,
+     *     galleryOpen: bool,
+     *     galleryIndex: int,
+     *     gallery: list<array{url: string, alt: string}>,
+     *     responseBranch: int,
+     *     framework: string,
+     *     email: string,
+     *     plan: string,
+     *     selectedDate: string,
+     *     expandedFolders: list<string>,
+     *     expandedAccordions: list<string>,
+     *     nativePackages: list<string>,
+     *     notice: string
+     * }
+     */
+    public function templateState(): array
+    {
+        return [
+            'checked' => $this->checked,
+            'progress' => $this->progress,
+            'modalOpen' => $this->modalOpen,
+            'sheetOpen' => $this->sheetOpen,
+            'drawerOpen' => $this->drawerOpen,
+            'selectOpen' => $this->selectOpen,
+            'galleryOpen' => $this->galleryOpen,
+            'galleryIndex' => $this->galleryIndex,
+            'gallery' => $this->gallery,
+            'responseBranch' => $this->responseBranch,
+            'framework' => $this->framework,
+            'email' => $this->email,
+            'plan' => $this->plan,
+            'selectedDate' => $this->selectedDate,
+            'expandedFolders' => $this->expandedFolders,
+            'expandedAccordions' => $this->expandedAccordions,
+            'nativePackages' => $this->nativePackages,
+            'notice' => $this->notice,
+        ];
+    }
+
+    public function loadMorePackages(): void
+    {
+        $this->notice = 'The recycled native list reached its loading boundary.';
+    }
+
+    public function chooseFramework(string $framework): void
+    {
+        $this->framework = $framework;
+        $this->selectOpen = false;
+    }
+
+    public function choosePlan(string $plan): void
+    {
+        $this->plan = $plan;
+    }
+}

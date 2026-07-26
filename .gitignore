@@ -1,0 +1,16 @@
+/vendor/
+**/vendor/
+/tools/phpstan/vendor/
+/.build/
+**/.gradle/
+**/.kotlin/
+**/.cxx/
+**/.externalNativeBuild/
+**/build/
+/.idea/
+/.vscode/
+/.pam-native/
+**/.pam-native/
+/composer.lock
+local.properties
+*.iml
