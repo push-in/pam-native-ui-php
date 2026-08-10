@@ -1,0 +1,21 @@
+<AppScreen title="PAM UI" subtitle="Native component showcase">
+        <template #actions>
+            <p-btn variant="text" on:press="openDrawer" accessibilityLabel="Open component menu"><Text>Menu</Text></p-btn>
+        </template>
+        <Column class="gap-3 py-2">
+            <p-chip variant="tonal"><Text>Material for native</Text></p-chip>
+            <Text size="2xl">One system. Two platforms.</Text>
+            <Text>Explore every p-* component as real Android and UIKit views.</Text>
+        </Column>
+        <Text size="xl">Browse by category</Text>
+        <p-list>
+            <p-list-item on:press="goActions"><Text>Actions</Text><Text>Buttons, chips and selection</Text></p-list-item>
+            <p-divider />
+            <p-list-item on:press="goForms"><Text>Forms</Text><Text>Inputs, pickers and validation</Text></p-list-item>
+            <p-divider />
+            <p-list-item on:press="goData"><Text>Data</Text><Text>Tables, lists and visualization</Text></p-list-item>
+            <p-divider />
+            <p-list-item on:press="goOverlays"><Text>Overlays</Text><Text>Dialogs, sheets and menus</Text></p-list-item>
+        </p-list>
+        <p-btn block="true" on:press="goAll"><Text>Explore all components</Text></p-btn>
+</AppScreen>
