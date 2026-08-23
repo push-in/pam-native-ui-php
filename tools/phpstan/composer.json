@@ -4,7 +4,7 @@
     "type": "project",
     "license": "Apache-2.0",
     "require": {
-        "php": "^8.4",
+        "php": "^8.5",
         "phpstan/phpstan": "^2.1"
     },
     "config": {

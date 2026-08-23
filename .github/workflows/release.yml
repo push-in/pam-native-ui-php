@@ -95,7 +95,7 @@ jobs:
       - uses: android-actions/setup-android@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           tools: composer:v2
       - name: Validate release version and package
         env:

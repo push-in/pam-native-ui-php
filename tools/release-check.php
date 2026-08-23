@@ -51,12 +51,12 @@ if (getenv('CI') === 'true') {
 }
 
 $assert(
-    ($composer['name'] ?? null) === 'pushinbr/pam-mobile-ui',
-    'The package must be named pushinbr/pam-mobile-ui.',
+    ($composer['name'] ?? null) === 'pushinbr/pam-native-ui',
+    'The package must be named pushinbr/pam-native-ui.',
 );
 $assert(
-    ($composer['require']['pushinbr/pam-native'] ?? null) === '^0.6.1',
-    'The package must require pushinbr/pam-native:^0.6.1.',
+    ($composer['require']['pushinbr/pam-native'] ?? null) === '^0.8.0',
+    'The package must require pushinbr/pam-native:^0.8.0.',
 );
 $assert(
     ($composer['type'] ?? null) === 'pam-native-plugin',
@@ -68,14 +68,14 @@ $assert(
     'The plugin schema must resolve through the pushinbr/pam-native package.',
 );
 $assert(
-    ($plugin['pamNative']['minimum'] ?? null) === '0.6.1'
+    ($plugin['pamNative']['minimum'] ?? null) === '0.8.0'
         && ($plugin['pamNative']['maximumExclusive'] ?? null) === '1.0.0',
-    'The plugin must support the PAM Native 0.6.x line.',
+    'The plugin must support the PAM Native 0.8.x line.',
 );
 $assert(
-    ($exampleComposer['require']['pushinbr/pam-mobile-ui'] ?? null) === '0.6.x-dev'
-        && ($exampleComposer['require']['pushinbr/pam-native'] ?? null) === '0.6.x-dev',
-    'The kitchen sink must exercise both public 0.6.x package lines.',
+    ($exampleComposer['require']['pushinbr/pam-native-ui'] ?? null) === '0.6.x-dev'
+        && ($exampleComposer['require']['pushinbr/pam-native'] ?? null) === '^0.8.0',
+    'The kitchen sink must exercise PAM Native UI 0.6 and runtime 0.8.',
 );
 
 $reference = $parity['reference'] ?? null;
