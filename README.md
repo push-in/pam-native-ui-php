@@ -1,43 +1,50 @@
+<!-- pam:distribution-page:start -->
 <div align="center">
 
-# PAM Native UI
+# PAM Native UI — Composer Distribution
 
-### Material Design 3, rebuilt for a truly native PHP stack.
+**The public Composer source for PAM Native UI.**
 
-**The official accessible component system for PAM Native: manually authored
-for Android and iOS, retained by design, and free from WebViews, JavaScript,
-CSS engines, and metadata-generated imitations.**
+This repository is an immutable release split of [pam-native-ui](https://github.com/push-in/pam-native-ui). Applications install it through Packagist; architecture, native hosts, issues, and contributions live in the canonical repository.
 
-[![Documentation](https://img.shields.io/badge/docs-component%20catalog-5b50d6?style=flat-square)](docs/catalog.md)
-![Material](https://img.shields.io/badge/Material%20Design-3-6750A4?style=flat-square)
-![Components](https://img.shields.io/badge/components-84-22c55e?style=flat-square)
-![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS-2563eb?style=flat-square)
-![License](https://img.shields.io/badge/license-Apache--2.0-22c55e?style=flat-square)
+[![Packagist](https://img.shields.io/packagist/v/pushinbr/pam-native-ui?style=flat-square&label=stable)](https://packagist.org/packages/pushinbr/pam-native-ui)
+![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?style=flat-square&logo=php&logoColor=white)
+![Status](https://img.shields.io/badge/repository-release%20mirror-64748b?style=flat-square)
 
-**[Documentation](docs/authoring.md) ·
-[Component catalog](docs/catalog.md) ·
-[Product foundations](docs/product-foundations.md) ·
-[Performance](docs/performance.md) ·
-[Contributing](CONTRIBUTING.md)**
+**[Canonical source](https://github.com/push-in/pam-native-ui) · [Documentation](https://push-in.github.io/pam-docs/native/overview/) · [Packagist](https://packagist.org/packages/pushinbr/pam-native-ui) · [Issues](https://github.com/push-in/pam-native-ui/issues)**
 
 </div>
 
 ---
+
+## Install the product
+
+```bash
+pam composer require pushinbr/pam-native-ui
+pam doctor --fix
+```
+
+## Repository ownership
+
+| | |
+| --- | --- |
+| **Use this distribution for** | Reproducible Composer downloads and release provenance |
+| **Use the canonical repository for** | Source, roadmap, architecture, issues, security reports, and contributions |
+| **Publication rule** | Generated only from a completed, matching canonical release |
+| **Application workflow** | Normal `composer.json`, `composer.lock`, and `vendor` managed through `pam composer` |
+<!-- pam:distribution-page:end -->
 
 PAM Native UI is a retained native Material Design 3 component library for
 PAM Native. It exposes 84 mobile `p-*` component parts across 62 manually authored
 modules and renders through Android views and UIKit without a WebView,
 JavaScript runtime, CSS engine, or Vuetify metadata importer.
 
-## Start here
+## Build your first application
 
 PAM Native UI depends on both the PAM Runtime and `pushinbr/pam-native`. Install
 PAM before adding the UI package:
 
 ```bash
-curl --proto '=https' --proto-redir '=https' --tlsv1.2 \
-    --connect-timeout 15 --max-time 60 --max-filesize 1048576 -fsSL \
-    https://github.com/push-in/pam/releases/latest/download/install.sh | sh
 
 pam doctor
 pam init my-app --template native-ui
