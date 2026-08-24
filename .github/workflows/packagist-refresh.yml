@@ -1,0 +1,81 @@
+name: Refresh ecosystem package on Packagist
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Public ecosystem mirror to refresh
+        required: true
+        type: choice
+        options:
+          - pam-api
+          - pam-core-api
+          - pam-native-ui-php
+          - pam-native-media
+          - pam-psr-bridge
+          - pam-skeleton
+          - pam-socket
+          - pam-testing
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  refresh:
+    name: Refresh verified public metadata
+    if: github.repository == 'push-in/pam-native-ui'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Refresh the allowlisted package
+        env:
+          PACKAGE: ${{ inputs.package }}
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |
+          case "${PACKAGE}" in
+            pam-api) composer_package='pushinbr/pam-api' ;;
+            pam-core-api) composer_package='pushinbr/pam-core-api' ;;
+            pam-native-ui-php) composer_package='pushinbr/pam-native-ui' ;;
+            pam-native-media) composer_package='pushinbr/pam-native-media' ;;
+            pam-psr-bridge) composer_package='pushinbr/pam-psr-bridge' ;;
+            pam-skeleton) composer_package='pushinbr/pam-skeleton' ;;
+            pam-socket) composer_package='pushinbr/pam-socket' ;;
+            pam-testing) composer_package='pushinbr/pam-testing' ;;
+            *) exit 64 ;;
+          esac
+          test -n "${PACKAGIST_USERNAME}"
+          test -n "${PACKAGIST_TOKEN}"
+          repository="https://github.com/push-in/${PACKAGE}"
+          payload=$(jq -cn --arg url "${repository}" '{repository: $url}')
+          status=$(curl --proto '=https' --tlsv1.2 \
+            --silent --output /dev/null --write-out '%{http_code}' \
+            "https://repo.packagist.org/p2/${composer_package}.json")
+          case "${status}" in
+            200) endpoint='update-package' ;;
+            404) endpoint='create-package' ;;
+            *)
+              printf 'Unexpected Packagist metadata response for %s: HTTP %s\n' \
+                "${composer_package}" "${status}" >&2
+              exit 1
+              ;;
+          esac
+          response_file="${RUNNER_TEMP}/packagist-response.json"
+          response_status=$(curl --proto '=https' --tlsv1.2 \
+            --silent --show-error \
+            --output "${response_file}" --write-out '%{http_code}' \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --header "Authorization: Bearer ${PACKAGIST_USERNAME}:${PACKAGIST_TOKEN}" \
+            --data "${payload}" \
+            "https://packagist.org/api/${endpoint}")
+          if [[ ${response_status} != 2* ]]; then
+            printf 'Packagist %s failed for %s with HTTP %s: ' \
+              "${endpoint}" "${composer_package}" "${response_status}" >&2
+            jq -c '.' "${response_file}" >&2 || head -c 1000 "${response_file}" >&2
+            exit 1
+          fi
+          jq -e '.status == "success"' "${response_file}" >/dev/null
